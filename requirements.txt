@@ -1,0 +1,10 @@
+gradio
+gitpython>=3.1.30
+seaborn
+deeplabcut[modelzoo,tf]>=3.0.0rc14
+deeplabcut-live
+ruamel.yaml==0.17.21
+dlclibrary
+humanfriendly
+psutil
+ultralytics
