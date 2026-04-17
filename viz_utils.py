@@ -49,6 +49,8 @@ def draw_keypoints_on_image(image,
     keypoints_y = [k[1] for k in keypoints]
     alpha = [k[2] for k in keypoints]
     norm = matplotlib.colors.Normalize(vmin=0, vmax=255)
+    colores = np.linspace(0, 255, num=len(map_label_id_to_str), dtype=int)
+
 
     # debugging keypoints
     print (keypoints)
@@ -92,7 +94,9 @@ def draw_keypoints_on_image(image,
 def draw_bbox_w_text(img,
                      results,
                      font_style='amiko',
-                     font_size=8): #TODO: select color too?
+                     font_size=8 ,
+                     bbox_color="red", 
+                     label_prefix="animal") : #TODO: select color too?
     #pdb.set_trace()
     bbxyxy = results
     w, h = bbxyxy[2], bbxyxy[3]
@@ -107,7 +111,7 @@ def draw_bbox_w_text(img,
     text_size = font.getbbox(string_bb) # (h,w)
     position = (bbxyxy[0],bbxyxy[1] - text_size[1] -2 )
     left, top, right, bottom = imgR.textbbox(position, string_bb, font=font)
-    imgR.rectangle((left, top-5, right+5, bottom+5), fill="red")
+    imgR.rectangle((left, top-5, right+5, bottom+5), fill=bbox_color)
     imgR.text((bbxyxy[0] + 3 ,bbxyxy[1] - text_size[1] -2 ), string_bb, font=font, fill="black")
 
     return imgR
@@ -124,7 +128,7 @@ def save_results_as_json(md_results, dlc_outputs, map_dlc_label_id_to_str, thr,m
     info['date'] = str(today)
     info['MD_model'] = str(mega_model_input)
     # info from megaDetector
-    info['file']= md_results.files[0]
+    info['file']= "uploaded_image"
     number_bb = len(md_results.xyxy[0].tolist())
     info['number_of_bb'] = number_bb
     # info from DLC
@@ -168,24 +172,19 @@ def save_results_as_json(md_results, dlc_outputs, map_dlc_label_id_to_str, thr,m
 
     return path_to_output_file
 
-
-def save_results_only_dlc(dlc_outputs,map_label_id_to_str,model,output_file = 'dowload_predictions_dlc.json'):
-
-    """
-    write json dlc output
-    """
+def save_results_only_dlc(dlc_outputs, map_label_id_to_str, model,
+                           output_file='download_predictions_dlc.json'):
     info = {}
     info['date'] = str(today)
-    labels = [n for n in map_label_id_to_str.values()]
     info['dlc_model'] = model
+    labels = [n for n in map_label_id_to_str.values()]
     kypts = []
     for s in dlc_outputs:
         aux1 = []
         for j in s:
             aux1.append(float(j))
-
         kypts.append(aux1)
-    info['dlc_pred']  = dict(zip(labels,kypts))
+    info['dlc_pred'] = dict(zip(labels, kypts))
 
     with open(output_file, 'w') as f:
         json.dump(info, f, indent=1)
