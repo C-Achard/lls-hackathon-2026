@@ -15,8 +15,6 @@ from sam3.model_builder import (
 )
 from tqdm import tqdm
 
-from .timer_util import StageTimer
-
 logger = logging.getLogger(__name__)
 
 
@@ -104,9 +102,8 @@ class DARTDetectorModel:
             logger.warning(f"Checkpoint file not found: {checkpoint}. The model will fail to load.")
             from sam3.model_builder import download_ckpt_from_hf
 
-            checkpoint = download_ckpt_from_hf(checkpoint)
+            checkpoint = download_ckpt_from_hf()
 
-        self.timer = StageTimer(use_cuda=device.startswith("cuda"))
         self.classes = list(classes)
         self.checkpoint = checkpoint
         self.device = device
