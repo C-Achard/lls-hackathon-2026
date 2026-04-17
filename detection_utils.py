@@ -155,7 +155,7 @@ _DART_MODEL_CACHE: dict[tuple, "DARTDetectorModel"] = {}
 
 
 def get_dart_detector(
-    checkpoint: str = "sam3.pt",
+    checkpoint: str = r"C:\Users\Cyril A\Desktop\Code\DeepLabCut-CAch\scripts\detectors\sam3.pt",
     *,
     classes: Sequence[str] = ("animal",),
     device: str | None = None,
@@ -191,7 +191,7 @@ def get_dart_detector(
     if cache_key not in _DART_MODEL_CACHE:
         detector = DARTDetectorModel(
             classes=list(classes),
-            # checkpoint=checkpoint,
+            checkpoint=r"C:\Users\Cyril A\Desktop\Code\DeepLabCut-CAch\scripts\detectors\sam3.pt",
             device=device,
             imgsz=imgsz,
             confidence=confidence,
@@ -264,11 +264,10 @@ def predict_md(
             "For animal cropping, use classes=('animal',)."
         )
 
-    checkpoint = megadetector_model or "sam3.pt"
     image = _ensure_pil_rgb(im)
 
     detector = get_dart_detector(
-        checkpoint=checkpoint,
+        checkpoint=r"C:\Users\Cyril A\Desktop\Code\DeepLabCut-CAch\scripts\detectors\sam3.pt",
         classes=classes,
         device=device,
         imgsz=size,
