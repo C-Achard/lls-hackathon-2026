@@ -15,7 +15,6 @@ from sam3.model_builder import (
 )
 from tqdm import tqdm
 
-from .timer_util import StageTimer
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +86,7 @@ class DARTDetectorModel:
     def __init__(
         self,
         classes: list[str],
-        checkpoint: str | None = "sam3.pt",
+        checkpoint: str | None = r"C:\Users\Cyril A\Desktop\Code\DeepLabCut-CAch\scripts\detectors\sam3.pt",
         device: str = "cuda",
         imgsz: int = 1008,
         confidence: float = 0.30,
@@ -101,12 +100,10 @@ class DARTDetectorModel:
         if imgsz % 14 != 0:
             raise ValueError(f"imgsz must be divisible by 14, got {imgsz}")
         if not Path(checkpoint).is_file():
-            logger.warning(f"Checkpoint file not found: {checkpoint}. The model will fail to load.")
+            logger.warning(f"Checkpoint file not found: {checkpoint}. Attempting to download.")
             from sam3.model_builder import download_ckpt_from_hf
+            checkpoint = download_ckpt_from_hf()
 
-            checkpoint = download_ckpt_from_hf(checkpoint)
-
-        self.timer = StageTimer(use_cuda=device.startswith("cuda"))
         self.classes = list(classes)
         self.checkpoint = checkpoint
         self.device = device

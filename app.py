@@ -60,14 +60,15 @@ def predict_pipeline(img_input,
                      font_size,
                      keypt_color,
                      marker_size,
+                     bbox_color
                      ):
 
     if not flag_dlc_only:
         ############################################################                                               
         # ### Run Megadetector
         md_results = predict_md(img_input, 
-                                MD_models_dict[mega_model_input], #mega_model_input,
-                                size=640) #Image.fromarray(results.imgs[0])
+                                MD_models_dict[mega_model_input] #mega_model_input,
+                                ) #Image.fromarray(results.imgs[0])
 
         ################################################################
         # Obtain animal crops for bboxes with confidence above th
@@ -187,7 +188,8 @@ demo = gr.Interface(predict_pipeline,
                     title=gr_title, 
                     description=gr_description,
                     examples=examples,
-                    theme="huggingface")
+                    # theme="huggingface"
+                    )
 
 demo.queue()
 demo.launch()

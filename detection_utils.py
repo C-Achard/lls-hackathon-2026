@@ -191,7 +191,7 @@ def get_dart_detector(
     if cache_key not in _DART_MODEL_CACHE:
         detector = DARTDetectorModel(
             classes=list(classes),
-            checkpoint=checkpoint,
+            # checkpoint=checkpoint,
             device=device,
             imgsz=imgsz,
             confidence=confidence,
