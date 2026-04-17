@@ -1,14 +1,26 @@
 import gradio as gr
 
+# ── Detector registry ─────────────────────────────────────────────────────────
+AVAILABLE_DETECTORS = [
+    "md_v5a",
+    "md_v5b",
+    # "your_new_detector",   ← just uncomment when ready
+]
 
 def gradio_inputs_for_MD_DLC(md_models_list, dlc_models_list):
     # Input image
     gr_image_input = gr.Image(type="pil", label="Input Image")
 
     # Models
-    gr_mega_model_input = gr.Dropdown(
-        choices=md_models_list,
-        value="md_v5a",
+    # gr_mega_model_input = gr.Dropdown(
+    #     choices=md_models_list,
+    #     value="md_v5a",
+    #     type="value",
+    #     label="Select Detector model",
+    # )
+    gr_detector_input = gr.Dropdown(
+        choices=AVAILABLE_DETECTORS,
+        value=AVAILABLE_DETECTORS[0],
         type="value",
         label="Select Detector model",
     )
@@ -26,6 +38,7 @@ def gradio_inputs_for_MD_DLC(md_models_list, dlc_models_list):
         label="Run DLClive only, directly on input image?",
     )
 
+    # ── Visualization toggles ─────────────────────────────────────────────────
     gr_str_labels_checkbox = gr.Checkbox(
         value=True,
         label="Show bodypart labels?",
@@ -48,12 +61,7 @@ def gradio_inputs_for_MD_DLC(md_models_list, dlc_models_list):
         label="Set confidence threshold for keypoints",
     )
 
-    # Data viz
-    gr_keypt_color = gr.ColorPicker(
-        value="#862db7",
-        label="Choose color for keypoint label",
-    )
-
+    # ── Visual style ──────────────────────────────────────────────────────────
     gr_labels_font_style = gr.Dropdown(
         choices=["amiko", "animals", "nature", "painter", "zen"],
         value="amiko",
@@ -69,6 +77,11 @@ def gradio_inputs_for_MD_DLC(md_models_list, dlc_models_list):
         label="Set font size",
     )
 
+    gr_keypt_color = gr.ColorPicker(
+        value="#862db7",
+        label="Keypoint label color",
+    )
+
     gr_slider_marker_size = gr.Slider(
         minimum=1,
         maximum=20,
@@ -77,9 +90,17 @@ def gradio_inputs_for_MD_DLC(md_models_list, dlc_models_list):
         label="Set marker size",
     )
 
+    # ── Bbox color ────────────────────────────────────────────────────────────
+    gr_bbox_color = gr.Dropdown(       # ← NEW
+        choices=["red", "green", "blue", "orange", "cyan", "yellow"],
+        value="red",
+        type="value",
+        label="Bounding box color",
+    )
+
     return [
         gr_image_input,
-        gr_mega_model_input,
+        gr_detector_input,
         gr_dlc_model_input,
         gr_dlc_only_checkbox,
         gr_str_labels_checkbox,
@@ -89,15 +110,16 @@ def gradio_inputs_for_MD_DLC(md_models_list, dlc_models_list):
         gr_slider_font_size,
         gr_keypt_color,
         gr_slider_marker_size,
+        gr_bbox_color,
     ]
 
-
+# ── Outputs ───────────────────────────────────────────────────────────────────
 def gradio_outputs_for_MD_DLC():
     gr_image_output = gr.Image(type="pil", label="Output Image")
     gr_file_download = gr.File(label="Download JSON file")
     return [gr_image_output, gr_file_download]
 
-
+# ── Title / description / examples ───────────────────────────────────────────
 def gradio_description_and_examples():
     title = "DeepLabCut Model Zoo SuperAnimals"
     description = (
@@ -115,12 +137,16 @@ def gradio_description_and_examples():
         "superanimal_quadruped_dlcrnet",
         False,
         True,
+        True,                 # show bbox     
+
         0.5,
         0.0,
         "amiko",
         9,
         "#ff0000",
         3,
+        "red",                # bbox color    
+
     ]]
 
     return [title, description, examples]
