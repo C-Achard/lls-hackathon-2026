@@ -27,6 +27,10 @@ from dlclibrary.dlcmodelzoo.modelzoo_download import (
     MODELOPTIONS,
 )
 from dlclive import DLCLive, Processor
+import sys
+if '__main__' not in sys.modules:
+    import types
+    sys.modules['__main__'] = types.ModuleType('__main__')
 
 
 # TESTING (passes) download the SuperAnimal models:
