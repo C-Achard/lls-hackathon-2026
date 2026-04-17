@@ -3,6 +3,7 @@
 # Adapted from https://huggingface.co/spaces/Neslihan/megadetector_dlcmodels/blob/main/app.py 
 # Adapted from  https://huggingface.co/spaces/DeepLabCut/MegaDetector_DeepLabCut
 
+# app.py: Main application file for the DeepLabCut + DART Pose Estimation Demo.
 import os
 import yaml
 import numpy as np
@@ -65,7 +66,7 @@ def predict_pipeline(img_input,
 
     if not flag_dlc_only:
         ############################################################                                               
-        # ### Run Megadetector
+        # ### Run DART
         md_results = predict_md(img_input, 
                                 MD_models_dict[mega_model_input] #mega_model_input,
                                 ) #Image.fromarray(results.imgs[0])
@@ -174,22 +175,41 @@ def predict_pipeline(img_input,
 
 #########################################################
 # Define user interface and launch
-inputs = gradio_inputs_for_MD_DLC(list(MD_models_dict.keys()),
-                                  list(DLC_models_dict.keys()))
-outputs = gradio_outputs_for_MD_DLC()                                    
-[gr_title, 
- gr_description, 
- examples] = gradio_description_and_examples()
 
-# launch
-demo = gr.Interface(predict_pipeline, 
-                    inputs=inputs,
-                    outputs=outputs, 
-                    title=gr_title, 
-                    description=gr_description,
+#########################################################
+# Define user interface and launch
+
+with gr.Blocks(theme=gr.themes.Default(neutral_hue="slate")) as demo:
+    gr_title, gr_description, examples = gradio_description_and_examples()
+
+    gr.HTML(gr_title)
+    gr.HTML(gr_description)
+
+    with gr.Row():
+        with gr.Column(scale=1, min_width=360):
+            inputs = gradio_inputs_for_MD_DLC(
+                list(MD_models_dict.keys()),
+                list(DLC_models_dict.keys())
+            )
+            run_btn = gr.Button("Run Analysis", variant="primary")
+
+        with gr.Column(scale=2):
+            outputs = gradio_outputs_for_MD_DLC()
+
+            if examples:
+                gr.Examples(
                     examples=examples,
-                    # theme="huggingface"
-                    )
+                    inputs=inputs,
+                    outputs=outputs,
+                    fn=predict_pipeline,
+                    cache_examples=False,
+                )
+
+    run_btn.click(
+        fn=predict_pipeline,
+        inputs=inputs,
+        outputs=outputs,
+    )
 
 demo.queue()
 demo.launch()

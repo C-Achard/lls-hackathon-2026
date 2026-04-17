@@ -155,7 +155,7 @@ _DART_MODEL_CACHE: dict[tuple, "DARTDetectorModel"] = {}
 
 
 def get_dart_detector(
-    checkpoint: str = "sam3.pt",
+    checkpoint: str = r"C:\Users\Cyril A\Desktop\Code\DeepLabCut-CAch\scripts\detectors\sam3.pt",
     *,
     classes: Sequence[str] = ("animal",),
     device: str | None = None,
@@ -165,8 +165,8 @@ def get_dart_detector(
     compile_mode: str | None = None,
     max_detections: int | None = None,
     largest_only: bool = False,
-    skip_blocks: set[int] | None = None,
-    mask_blocks: list[str] | None = None,
+    # skip_blocks: set[int] | None = None,
+    # mask_blocks: list[str] | None = None,
 ) -> "DARTDetectorModel":
     """
     Build and cache a DARTDetectorModel so it is not reloaded every call.
@@ -184,14 +184,14 @@ def get_dart_detector(
         compile_mode,
         max_detections,
         bool(largest_only),
-        tuple(sorted(skip_blocks)) if skip_blocks else None,
-        tuple(mask_blocks) if mask_blocks else None,
+        # tuple(sorted(skip_blocks)) if skip_blocks else None,
+        # tuple(mask_blocks) if mask_blocks else None,
     )
 
     if cache_key not in _DART_MODEL_CACHE:
         detector = DARTDetectorModel(
             classes=list(classes),
-            # checkpoint=checkpoint,
+            checkpoint=r"C:\Users\Cyril A\Desktop\Code\DeepLabCut-CAch\scripts\detectors\sam3.pt",
             device=device,
             imgsz=imgsz,
             confidence=confidence,
@@ -199,8 +199,8 @@ def get_dart_detector(
             compile_mode=compile_mode,
             max_detections=max_detections,
             largest_only=largest_only,
-            skip_blocks=skip_blocks,
-            mask_blocks=mask_blocks,
+            # skip_blocks=skip_blocks,
+            # mask_blocks=mask_blocks,
         )
         detector.warmup()
         _DART_MODEL_CACHE[cache_key] = detector
@@ -224,8 +224,8 @@ def predict_md(
     compile_mode: str | None = None,
     max_detections: int | None = None,
     largest_only: bool = False,
-    skip_blocks: set[int] | None = None,
-    mask_blocks: list[str] | None = None,
+    # skip_blocks: set[int] | None = None,
+    # mask_blocks: list[str] | None = None,
 ) -> DARTResults:
     """
     Drop-in replacement for the old YOLO/MegaDetector predict_md().
@@ -264,11 +264,10 @@ def predict_md(
             "For animal cropping, use classes=('animal',)."
         )
 
-    checkpoint = megadetector_model or "sam3.pt"
     image = _ensure_pil_rgb(im)
 
     detector = get_dart_detector(
-        checkpoint=checkpoint,
+        checkpoint=r"C:\Users\Cyril A\Desktop\Code\DeepLabCut-CAch\scripts\detectors\sam3.pt",
         classes=classes,
         device=device,
         imgsz=size,
@@ -277,8 +276,8 @@ def predict_md(
         compile_mode=compile_mode,
         max_detections=max_detections,
         largest_only=largest_only,
-        skip_blocks=skip_blocks,
-        mask_blocks=mask_blocks,
+        # skip_blocks=skip_blocks,
+        # mask_blocks=mask_blocks,
     )
 
     raw = detector.inference([image])[0]
