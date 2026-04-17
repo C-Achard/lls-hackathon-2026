@@ -151,9 +151,6 @@ def gradio_description_and_examples():
     description = """
     <div style='text-align: center; font-size: 1.05em; color: gray; font-family: "Consolas", monospace;'>
         <p>Run DART + DeepLabCut SuperAnimal inference</p>
-        <p>
-            The inference pipeline in <code>app.py</code> remains unchanged — only the UI wiring is updated.
-        </p>
     </div>
     """
 
