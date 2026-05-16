@@ -15,7 +15,7 @@ We implemented a proof-of-concept integration and compared several detectors:
 - YOLO26-E
 
 <!-- ./images/DART.svg -->
-![DART](./images/DART.svg)
+![DART](https://raw.githubusercontent.com/C-Achard/lls-hackathon-2026/main/images/DART.SVG)
 <p align="center">
   <em><span style="color: #888888;">Figure 1: Example output from the DART (SAM3-based) detector on trimice (left) and fish (right).</span></em>
 </p>
@@ -26,7 +26,7 @@ We implemented a proof-of-concept integration and compared several detectors:
 
 We compared the zero-shot performance of the foundation model detectors to a purpose-trained DeepLabCut detector, showing that mAP-50 and mAR-50 are comparable for certain models, namely GroundingDINO and DART, even lightly outperforming DeepLabCut on trimice, without any fine-tuning. 
 
-![Detection Performance](./images/DET_BENCH.svg)
+![Detection Performance](https://raw.githubusercontent.com/C-Achard/lls-hackathon-2026/main/images/DET_BENCH.SVG)
 <p align="center">
   <em><span style="color: #888888;">Figure 2: Comparison of foundation model detectors performance (zero-shot), compared to a purpose-trained DeepLabCut detector, on two datasets.</span></em>
 </p>
@@ -47,14 +47,14 @@ Investigation the failure modes of detectors on the second dataset would be an i
 
 #### Fish dataset
 
-![Pose estimation Performance](./images/pose_bench1.svg)
+![Pose estimation Performance](https://raw.githubusercontent.com/C-Achard/lls-hackathon-2026/main/images/pose_bench1.SVG)
 <p align="center">
   <em><span style="color: #888888;">Figure 3: Comparison of pose estimation performance using foundation model detectors versus a purpose-trained DeepLabCut detector and ground truth (GT) detections on the fish dataset.</span></em>
 </p>
 
 #### Trimice dataset
 
-![Pose estimation Performance](./images/pose_bench2.svg)
+![Pose estimation Performance](https://raw.githubusercontent.com/C-Achard/lls-hackathon-2026/main/images/pose_bench2.SVG)
 <p align="center">
   <em><span style="color: #888888;">Figure 4: Comparison of pose estimation performance using foundation model detectors versus a purpose-trained DeepLabCut detector and ground truth (GT) detections on the trimice dataset.</span></em>
 </p>
